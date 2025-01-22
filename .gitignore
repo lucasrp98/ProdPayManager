@@ -20,6 +20,7 @@ target/
 *.iml
 *.ipr
 
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
@@ -34,3 +35,13 @@ build/
 .vscode/
 /log
 /log/spring.log
+.DS_Store
+
+# Ignorar logs e arquivos de execução
+logs/
+*.log
+*.out
+
+# Ignorar arquivos de controle de versão
+*.xml
+
