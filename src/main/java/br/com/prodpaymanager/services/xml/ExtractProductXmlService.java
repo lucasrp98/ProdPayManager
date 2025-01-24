@@ -3,6 +3,7 @@ package br.com.prodpaymanager.services.xml;
 import br.com.prodpaymanager.models.product.Product;
 import br.com.prodpaymanager.repositories.xml.IExtractProductXmlService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -13,7 +14,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-
+@Service
 public class ExtractProductXmlService implements IExtractProductXmlService {
 
     @Autowired
@@ -29,16 +30,16 @@ public class ExtractProductXmlService implements IExtractProductXmlService {
             Document doc = builder.parse(is);
             doc.getDocumentElement().normalize();
 
-            NodeList prodList = doc.getElementsByTagNameNS("http://www.portalfiscal.inf.br/nfe", "prod");
+            NodeList prodList = doc.getElementsByTagName("prod");
             List<Product> products = new ArrayList<>();
 
             for (int i = 0; i < prodList.getLength(); i++) {
                 Element prodElement = (Element) prodList.item(i);
-                String cEAN = prodElement.getElementsByTagNameNS("http://www.portalfiscal.inf.br/nfe", "cEAN").item(0).getTextContent();
-                String xProd = prodElement.getElementsByTagNameNS("http://www.portalfiscal.inf.br/nfe", "xProd").item(0).getTextContent();
-                String qCom = prodElement.getElementsByTagNameNS("http://www.portalfiscal.inf.br/nfe", "qCom").item(0).getTextContent();
-                String vUnCom = prodElement.getElementsByTagNameNS("http://www.portalfiscal.inf.br/nfe", "vUnCom").item(0).getTextContent();
-                String vProd = prodElement.getElementsByTagNameNS("http://www.portalfiscal.inf.br/nfe", "vProd").item(0).getTextContent();
+                String cEAN = prodElement.getElementsByTagName("cEAN").item(0).getTextContent();
+                String xProd = prodElement.getElementsByTagName( "xProd").item(0).getTextContent();
+                String qCom = prodElement.getElementsByTagName("qCom").item(0).getTextContent();
+                String vUnCom = prodElement.getElementsByTagName( "vUnCom").item(0).getTextContent();
+                String vProd = prodElement.getElementsByTagName("vProd").item(0).getTextContent();
 
                 products.add(new Product(cEAN, xProd, qCom, vUnCom, vProd));
             }
