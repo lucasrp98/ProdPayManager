@@ -12,7 +12,7 @@
 	<artifactId>prodpaymanager</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>prodpaymanager</name>
-	<description>Streamlining product management and payment scheduling with ease.</description>
+	<description>Streamlining productEntity management and payment scheduling with ease.</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -58,6 +58,13 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.7.3</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

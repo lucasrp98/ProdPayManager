@@ -1,7 +1,9 @@
 package br.com.prodpaymanager.services.xml;
 
-import br.com.prodpaymanager.models.product.Product;
+import br.com.prodpaymanager.dto.ProductCreationDTO;
+import br.com.prodpaymanager.models.product.ProductEntity;
 import br.com.prodpaymanager.repositories.xml.IExtractProductXmlService;
+import br.com.prodpaymanager.services.product.CreateProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -18,7 +20,7 @@ import java.util.List;
 public class ExtractProductXmlService implements IExtractProductXmlService {
 
     @Autowired
-    Product product;
+    CreateProductService createProductService;
 
     @Override
     public Object getProductXml(String xml) {
@@ -31,23 +33,24 @@ public class ExtractProductXmlService implements IExtractProductXmlService {
             doc.getDocumentElement().normalize();
 
             NodeList prodList = doc.getElementsByTagName("prod");
-            List<Product> products = new ArrayList<>();
+            List<ProductCreationDTO> productCreationDTOS = new ArrayList<>();
 
             for (int i = 0; i < prodList.getLength(); i++) {
                 Element prodElement = (Element) prodList.item(i);
                 String cEAN = prodElement.getElementsByTagName("cEAN").item(0).getTextContent();
                 String xProd = prodElement.getElementsByTagName( "xProd").item(0).getTextContent();
-                String qCom = prodElement.getElementsByTagName("qCom").item(0).getTextContent();
+                int qCom = Integer.parseInt(prodElement.getElementsByTagName("qCom").item(0).getTextContent());
                 String vUnCom = prodElement.getElementsByTagName( "vUnCom").item(0).getTextContent();
                 String vProd = prodElement.getElementsByTagName("vProd").item(0).getTextContent();
 
-                products.add(new Product(cEAN, xProd, qCom, vUnCom, vProd));
+                ProductCreationDTO productCreationDTO = new ProductCreationDTO(cEAN, xProd, qCom, vUnCom, vProd);
+
+                productCreationDTOS.add(productCreationDTO);
+
+                createProductService.saveProduct(productCreationDTO);
             }
 
-            for (Product product : products) {
-                System.out.println(product.getXProd());
-            }
-            return products;
+            return productCreationDTOS;
 
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
