@@ -1,13 +1,13 @@
 package br.com.prodpaymanager.services.product;
 
-import br.com.prodpaymanager.dto.ProductCreationDTO;
+import br.com.prodpaymanager.dto.product.ProductCreationDTO;
 import br.com.prodpaymanager.models.product.ProductEntity;
 import br.com.prodpaymanager.repositories.product.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CreateProductService {
+public class CreateProductService{
 
     @Autowired
     private ProductRepository productRepository;

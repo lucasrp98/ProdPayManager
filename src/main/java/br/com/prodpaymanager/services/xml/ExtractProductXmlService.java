@@ -1,8 +1,7 @@
 package br.com.prodpaymanager.services.xml;
 
-import br.com.prodpaymanager.dto.ProductCreationDTO;
-import br.com.prodpaymanager.models.product.ProductEntity;
-import br.com.prodpaymanager.repositories.xml.IExtractProductXmlService;
+import br.com.prodpaymanager.dto.product.ProductCreationDTO;
+import br.com.prodpaymanager.Interfaces.xml.IExtractProductXmlService;
 import br.com.prodpaymanager.services.product.CreateProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,12 +1,9 @@
-package br.com.prodpaymanager.dto;
+package br.com.prodpaymanager.dto.product;
 
 import br.com.prodpaymanager.models.product.ProductEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-
-import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
