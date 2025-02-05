@@ -1,7 +1,6 @@
 package br.com.prodpaymanager.dto.payment;
 
 import br.com.prodpaymanager.models.payment.PaymentEntity;
-import br.com.prodpaymanager.models.product.ProductEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

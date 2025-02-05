@@ -1,6 +1,6 @@
 package br.com.prodpaymanager.services.payment;
 
-import br.com.prodpaymanager.Interfaces.payment.IPaymentProductService;
+import br.com.prodpaymanager.Interfaces.payment.IPaymentPieceService;
 import br.com.prodpaymanager.dto.payment.PaymentCreationDTO;
 import br.com.prodpaymanager.models.installment.InstallmentEntity;
 import br.com.prodpaymanager.models.payment.PaymentEntity;
@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class PaymentProductService implements IPaymentProductService{
+public class PaymentPieceService implements IPaymentPieceService {
 
     @Autowired
     PaymentRepository paymentRepository;

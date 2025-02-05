@@ -1,8 +1,8 @@
 package br.com.prodpaymanager.services.xml;
 
-import br.com.prodpaymanager.dto.product.ProductCreationDTO;
-import br.com.prodpaymanager.Interfaces.xml.IExtractProductXmlService;
-import br.com.prodpaymanager.services.product.CreateProductService;
+import br.com.prodpaymanager.dto.piece.PieceCreationDTO;
+import br.com.prodpaymanager.Interfaces.xml.IExtractPieceXmlService;
+import br.com.prodpaymanager.services.piece.CreatePieceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -16,13 +16,13 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 @Service
-public class ExtractProductXmlService implements IExtractProductXmlService {
+public class ExtractPieceXmlService implements IExtractPieceXmlService {
 
     @Autowired
-    CreateProductService createProductService;
+    CreatePieceService createPieceService;
 
     @Override
-    public Object getProductXml(String xml) {
+    public Object getPieceXml(String xml) {
 
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -32,7 +32,7 @@ public class ExtractProductXmlService implements IExtractProductXmlService {
             doc.getDocumentElement().normalize();
 
             NodeList prodList = doc.getElementsByTagName("prod");
-            List<ProductCreationDTO> productCreationDTOS = new ArrayList<>();
+            List<PieceCreationDTO> pieceCreationDTOS = new ArrayList<>();
 
             for (int i = 0; i < prodList.getLength(); i++) {
                 Element prodElement = (Element) prodList.item(i);
@@ -42,14 +42,14 @@ public class ExtractProductXmlService implements IExtractProductXmlService {
                 String vUnCom = prodElement.getElementsByTagName( "vUnCom").item(0).getTextContent();
                 String vProd = prodElement.getElementsByTagName("vProd").item(0).getTextContent();
 
-                ProductCreationDTO productCreationDTO = new ProductCreationDTO(cEAN, xProd, qCom, vUnCom, vProd);
+                PieceCreationDTO pieceCreationDTO = new PieceCreationDTO(cEAN, xProd, qCom, vUnCom, vProd);
 
-                productCreationDTOS.add(productCreationDTO);
+                pieceCreationDTOS.add(pieceCreationDTO);
 
-                createProductService.saveProduct(productCreationDTO);
+                createPieceService.saveProduct(pieceCreationDTO);
             }
 
-            return productCreationDTOS;
+            return pieceCreationDTOS;
 
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
