@@ -16,6 +16,7 @@ public class PaymentCreationDTO {
     private Integer numberInstallments;
     private Date datePurchase;
     private Integer dayExpirationInstallment;
+    private int buyId;
 
     public PaymentEntity toProductEntity() {
         PaymentEntity paymentEntity = new PaymentEntity();

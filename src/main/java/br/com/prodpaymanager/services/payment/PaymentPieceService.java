@@ -2,18 +2,17 @@ package br.com.prodpaymanager.services.payment;
 
 import br.com.prodpaymanager.Interfaces.payment.IPaymentPieceService;
 import br.com.prodpaymanager.dto.payment.PaymentCreationDTO;
+import br.com.prodpaymanager.models.buy.BuyEntity;
 import br.com.prodpaymanager.models.installment.InstallmentEntity;
 import br.com.prodpaymanager.models.payment.PaymentEntity;
+import br.com.prodpaymanager.repositories.buy.BuyRepository;
 import br.com.prodpaymanager.repositories.installment.InstallmentRepository;
 import br.com.prodpaymanager.repositories.payment.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class PaymentPieceService implements IPaymentPieceService {
@@ -24,11 +23,24 @@ public class PaymentPieceService implements IPaymentPieceService {
     @Autowired
     InstallmentRepository installmentRepository;
 
+    @Autowired
+    BuyRepository buyRepository;
+
     @Override
     public void savePayment(PaymentCreationDTO paymentCreationDTO) {
         PaymentEntity paymentEntity = paymentCreationDTO.toProductEntity();
         this.paymentRepository.save(paymentEntity);
         saveInstallment(paymentEntity);
+
+        Optional<BuyEntity> optionalBuy = buyRepository.findById(paymentCreationDTO.getBuyId());
+
+        if (optionalBuy.isPresent()) {
+            BuyEntity buy = optionalBuy.get();
+            buy.setPaymentEntity(paymentEntity);
+            buyRepository.save(buy);
+        } else {
+            throw new RuntimeException("Compra não encontrada para o ID: " + paymentCreationDTO.getBuyId());
+        }
     }
 
     public void saveInstallment(PaymentEntity paymentEntity){

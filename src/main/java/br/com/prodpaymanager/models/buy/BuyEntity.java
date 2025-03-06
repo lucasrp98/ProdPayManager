@@ -1,12 +1,15 @@
 package br.com.prodpaymanager.models.buy;
 
+import br.com.prodpaymanager.dto.piece.PieceCreationDTO;
 import br.com.prodpaymanager.models.payment.PaymentEntity;
 import br.com.prodpaymanager.models.piece.PieceEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -21,8 +24,11 @@ public class BuyEntity {
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinTable(name = "piece_has_buy", joinColumns = @JoinColumn(name = "buy_id"),
             inverseJoinColumns = @JoinColumn(name = "piece_id"))
-    private List<PieceEntity> pieceEntityList;
+    private List<PieceEntity> pieceEntity;
     @OneToOne
     private PaymentEntity paymentEntity;
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
 }

@@ -2,6 +2,9 @@ package br.com.prodpaymanager.services.xml;
 
 import br.com.prodpaymanager.dto.piece.PieceCreationDTO;
 import br.com.prodpaymanager.Interfaces.xml.IExtractPieceXmlService;
+import br.com.prodpaymanager.models.buy.BuyEntity;
+import br.com.prodpaymanager.models.piece.PieceEntity;
+import br.com.prodpaymanager.repositories.buy.BuyRepository;
 import br.com.prodpaymanager.services.piece.CreatePieceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,14 +18,19 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class ExtractPieceXmlService implements IExtractPieceXmlService {
 
     @Autowired
     CreatePieceService createPieceService;
 
+    @Autowired
+    BuyRepository buyRepository;
+
     @Override
-    public Object getPieceXml(String xml) {
+    public int getPieceXml(String xml) {
 
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -49,7 +57,15 @@ public class ExtractPieceXmlService implements IExtractPieceXmlService {
                 createPieceService.saveProduct(pieceCreationDTO);
             }
 
-            return pieceCreationDTOS;
+            List<PieceEntity> pieceEntities = pieceCreationDTOS.stream()
+                    .map(PieceCreationDTO::toPieceEntity)
+                    .collect(Collectors.toList());
+
+            BuyEntity buy = new BuyEntity();
+            buy.setPieceEntity(pieceEntities);
+            buyRepository.save(buy);
+
+            return buy.getId();
 
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
