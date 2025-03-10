@@ -16,13 +16,13 @@ public class CreatePieceService {
 
         PieceEntity pieceEntity = pieceCreationDTO.toPieceEntity();
 
-        this.pieceRepository
-                    .findBycEAN(pieceEntity.getCEAN())
-                    .ifPresent((piece) -> {
-                        toAddAmount(piece, pieceEntity.getQCom());
-
-                    });
-            return this.pieceRepository.save(pieceEntity);
+        return this.pieceRepository
+                .findBycEAN(pieceEntity.getCEAN())
+                .map(existingPiece -> {
+                    toAddAmount(existingPiece, pieceEntity.getQCom());
+                    return this.pieceRepository.save(pieceEntity);
+                })
+                .orElseGet(() -> this.pieceRepository.save(pieceEntity));
     }
 
     public void toAddAmount (PieceEntity piece, int additionalAmount){

@@ -8,6 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface BuyRepository extends JpaRepository<BuyEntity, Integer> {
-    Optional<BuyEntity> findById(int id);
 }
 

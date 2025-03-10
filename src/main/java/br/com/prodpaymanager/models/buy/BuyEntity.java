@@ -17,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity(name = "buy")
 public class BuyEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "buy_seq")
     @SequenceGenerator(name = "buy_seq", sequenceName = "buy_seq", allocationSize = 1)
@@ -25,8 +26,15 @@ public class BuyEntity {
     @JoinTable(name = "piece_has_buy", joinColumns = @JoinColumn(name = "buy_id"),
             inverseJoinColumns = @JoinColumn(name = "piece_id"))
     private List<PieceEntity> pieceEntity;
+
     @OneToOne
     private PaymentEntity paymentEntity;
+
+    @Column(name = "qcom")
+    private int qCom;
+    @Column(name = "vuncom")
+    private String vUnCom;
+
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;

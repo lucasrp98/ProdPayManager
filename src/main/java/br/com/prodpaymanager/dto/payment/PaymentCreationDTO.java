@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,7 +17,7 @@ public class PaymentCreationDTO {
     private Integer numberInstallments;
     private Date datePurchase;
     private Integer dayExpirationInstallment;
-    private int buyId;
+    private List<Integer> buyId;
 
     public PaymentEntity toProductEntity() {
         PaymentEntity paymentEntity = new PaymentEntity();

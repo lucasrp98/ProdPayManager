@@ -32,14 +32,15 @@ public class PaymentPieceService implements IPaymentPieceService {
         this.paymentRepository.save(paymentEntity);
         saveInstallment(paymentEntity);
 
-        Optional<BuyEntity> optionalBuy = buyRepository.findById(paymentCreationDTO.getBuyId());
+        List<BuyEntity> buyEntities = buyRepository.findAllById(paymentCreationDTO.getBuyId());
 
-        if (optionalBuy.isPresent()) {
-            BuyEntity buy = optionalBuy.get();
-            buy.setPaymentEntity(paymentEntity);
-            buyRepository.save(buy);
+        if (!buyEntities.isEmpty()) {
+            for (BuyEntity buy : buyEntities) {
+                buy.setPaymentEntity(paymentEntity);
+            }
+            buyRepository.saveAll(buyEntities);
         } else {
-            throw new RuntimeException("Compra não encontrada para o ID: " + paymentCreationDTO.getBuyId());
+            throw new RuntimeException("Nenhuma compra encontrada para os IDs fornecidos: " + paymentCreationDTO.getBuyId());
         }
     }
 
