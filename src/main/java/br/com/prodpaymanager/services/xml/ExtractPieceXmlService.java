@@ -4,6 +4,7 @@ import br.com.prodpaymanager.dto.piece.PieceCreationDTO;
 import br.com.prodpaymanager.Interfaces.xml.IExtractPieceXmlService;
 import br.com.prodpaymanager.models.buy.BuyEntity;
 import br.com.prodpaymanager.models.piece.PieceEntity;
+import br.com.prodpaymanager.models.piece_buy.PieceBuy;
 import br.com.prodpaymanager.repositories.buy.BuyRepository;
 import br.com.prodpaymanager.services.piece.CreatePieceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -31,19 +33,19 @@ public class ExtractPieceXmlService implements IExtractPieceXmlService {
     BuyRepository buyRepository;
 
     @Override
-    public List<Integer> getPieceXml(String xml) {
+    public Integer getPieceXml(String xml) {
 
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            InputStream is = new ByteArrayInputStream(xml.getBytes("UTF-8"));
+            InputStream is = new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8));
             Document doc = builder.parse(is);
             doc.getDocumentElement().normalize();
 
             NodeList prodList = doc.getElementsByTagName("prod");
-            List<PieceCreationDTO> pieceCreationDTOS = new ArrayList<>();
+            List<PieceBuy> pieceBuys = new ArrayList<>();
 
-            List<BuyEntity> buyEntities = new ArrayList<>();
+            BuyEntity buy = new BuyEntity();
 
             for (int i = 0; i < prodList.getLength(); i++) {
                 Element prodElement = (Element) prodList.item(i);
@@ -51,24 +53,23 @@ public class ExtractPieceXmlService implements IExtractPieceXmlService {
                 String xProd = prodElement.getElementsByTagName("xProd").item(0).getTextContent();
                 int qCom = Integer.parseInt(prodElement.getElementsByTagName("qCom").item(0).getTextContent());
                 String vUnCom = prodElement.getElementsByTagName("vUnCom").item(0).getTextContent();
-                String vProd = prodElement.getElementsByTagName("vProd").item(0).getTextContent();
 
-                PieceCreationDTO pieceCreationDTO = new PieceCreationDTO(cEAN, xProd, qCom, vUnCom, vProd);
-                pieceCreationDTOS.add(pieceCreationDTO);
+                PieceCreationDTO pieceDTO = new PieceCreationDTO(cEAN, xProd, qCom, vUnCom, "0");
+                PieceEntity pieceEntity = createPieceService.saveProduct(pieceDTO);
 
-                PieceEntity pieceEntity = createPieceService.saveProduct(pieceCreationDTO);
+                PieceBuy pieceBuy = new PieceBuy();
+                pieceBuy.setBuy(buy);
+                pieceBuy.setPiece(pieceEntity);
+                pieceBuy.setQCom(qCom);
+                pieceBuy.setVUnCom(vUnCom);
 
-                BuyEntity buy = new BuyEntity();
-                buy.setPieceEntity(Collections.singletonList(pieceEntity));
-                buy.setQCom(pieceEntity.getQCom());
-                buy.setVUnCom(pieceEntity.getVUnCom());
-
-                buyEntities.add(buy);
+                pieceBuys.add(pieceBuy);
             }
 
-            buyRepository.saveAll(buyEntities);
+            buy.setPieceBuys(pieceBuys);
+            buyRepository.save(buy);
 
-            return buyEntities.stream().map(BuyEntity::getId).collect(Collectors.toList());
+            return buy.getId();
 
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
