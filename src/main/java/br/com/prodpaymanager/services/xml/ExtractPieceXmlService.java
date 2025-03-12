@@ -53,8 +53,9 @@ public class ExtractPieceXmlService implements IExtractPieceXmlService {
                 String xProd = prodElement.getElementsByTagName("xProd").item(0).getTextContent();
                 int qCom = Integer.parseInt(prodElement.getElementsByTagName("qCom").item(0).getTextContent());
                 String vUnCom = prodElement.getElementsByTagName("vUnCom").item(0).getTextContent();
+                String vProd = prodElement.getElementsByTagName("vUnCom").item(0).getTextContent();
 
-                PieceCreationDTO pieceDTO = new PieceCreationDTO(cEAN, xProd, qCom, vUnCom, "0");
+                PieceCreationDTO pieceDTO = new PieceCreationDTO(cEAN, xProd, qCom, vUnCom, vProd);
                 PieceEntity pieceEntity = createPieceService.saveProduct(pieceDTO);
 
                 PieceBuy pieceBuy = new PieceBuy();
