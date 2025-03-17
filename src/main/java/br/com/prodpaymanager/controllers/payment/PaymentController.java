@@ -1,6 +1,6 @@
 package br.com.prodpaymanager.controllers.payment;
 
-import br.com.prodpaymanager.Interfaces.payment.IPaymentPieceService;
+import br.com.prodpaymanager.interfaces.payment.IPaymentPieceService;
 import br.com.prodpaymanager.dto.payment.PaymentCreationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

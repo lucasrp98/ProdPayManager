@@ -12,11 +12,17 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class PaymentCreationDTO {
+
     private String formPayment;
+
     private double valueTotal;
+
     private Integer numberInstallments;
+
     private Date datePurchase;
+
     private Integer dayExpirationInstallment;
+
     private Integer buyId;
 
     public PaymentEntity toProductEntity() {

@@ -18,16 +18,22 @@ public class PaymentEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "payment_seq")
     @SequenceGenerator(name = "payment_seq", sequenceName = "payment_seq", allocationSize = 1)
     private int id;
+
     @Column(name = "form_payment")
     private String formPayment;
+
     @Column(name = "value_total")
     private double valueTotal;
+
     @Column(name = "number_installments")
     private Integer numberInstallments;
+
     @Column(name = "date_purchase")
     private Date datePurchase;
+
     @Column(name = "day_expiration_installment")
     private Integer dayExpirationInstallment;
+
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;

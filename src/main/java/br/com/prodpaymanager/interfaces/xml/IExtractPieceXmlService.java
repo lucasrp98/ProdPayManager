@@ -1,6 +1,4 @@
-package br.com.prodpaymanager.Interfaces.xml;
-
-import java.util.List;
+package br.com.prodpaymanager.interfaces.xml;
 
 public interface IExtractPieceXmlService {
         Integer getPieceXml(String xml);

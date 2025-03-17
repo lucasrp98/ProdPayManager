@@ -1,4 +1,4 @@
-package br.com.prodpaymanager.Interfaces.payment;
+package br.com.prodpaymanager.interfaces.payment;
 
 import br.com.prodpaymanager.dto.payment.PaymentCreationDTO;
 

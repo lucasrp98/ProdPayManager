@@ -1,10 +1,10 @@
 package br.com.prodpaymanager.services.xml;
 
 import br.com.prodpaymanager.dto.piece.PieceCreationDTO;
-import br.com.prodpaymanager.Interfaces.xml.IExtractPieceXmlService;
+import br.com.prodpaymanager.interfaces.xml.IExtractPieceXmlService;
 import br.com.prodpaymanager.models.buy.BuyEntity;
 import br.com.prodpaymanager.models.piece.PieceEntity;
-import br.com.prodpaymanager.models.piece_buy.PieceBuy;
+import br.com.prodpaymanager.models.piece_buy.PieceBuyEntity;
 import br.com.prodpaymanager.repositories.buy.BuyRepository;
 import br.com.prodpaymanager.services.piece.CreatePieceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +19,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ExtractPieceXmlService implements IExtractPieceXmlService {
@@ -43,7 +41,7 @@ public class ExtractPieceXmlService implements IExtractPieceXmlService {
             doc.getDocumentElement().normalize();
 
             NodeList prodList = doc.getElementsByTagName("prod");
-            List<PieceBuy> pieceBuys = new ArrayList<>();
+            List<PieceBuyEntity> pieceBuyEntities = new ArrayList<>();
 
             BuyEntity buy = new BuyEntity();
 
@@ -52,22 +50,20 @@ public class ExtractPieceXmlService implements IExtractPieceXmlService {
                 String cEAN = prodElement.getElementsByTagName("cEAN").item(0).getTextContent();
                 String xProd = prodElement.getElementsByTagName("xProd").item(0).getTextContent();
                 int qCom = Integer.parseInt(prodElement.getElementsByTagName("qCom").item(0).getTextContent());
-                String vUnCom = prodElement.getElementsByTagName("vUnCom").item(0).getTextContent();
-                String vProd = prodElement.getElementsByTagName("vUnCom").item(0).getTextContent();
+                double vUnCom = Double.parseDouble(prodElement.getElementsByTagName("vUnCom").item(0).getTextContent());
 
-                PieceCreationDTO pieceDTO = new PieceCreationDTO(cEAN, xProd, qCom, vUnCom, vProd);
+                PieceCreationDTO pieceDTO = new PieceCreationDTO(cEAN, xProd, qCom, vUnCom);
                 PieceEntity pieceEntity = createPieceService.saveProduct(pieceDTO);
 
-                PieceBuy pieceBuy = new PieceBuy();
-                pieceBuy.setBuy(buy);
-                pieceBuy.setPiece(pieceEntity);
-                pieceBuy.setQCom(qCom);
-                pieceBuy.setVUnCom(vUnCom);
+                PieceBuyEntity pieceBuyEntity = new PieceBuyEntity();
+                pieceBuyEntity.setBuy(buy);
+                pieceBuyEntity.setPiece(pieceEntity);
+                pieceBuyEntity.setQCom(qCom);
 
-                pieceBuys.add(pieceBuy);
+                pieceBuyEntities.add(pieceBuyEntity);
             }
 
-            buy.setPieceBuys(pieceBuys);
+            buy.setPieceBuyEntities(pieceBuyEntities);
             buyRepository.save(buy);
 
             return buy.getId();

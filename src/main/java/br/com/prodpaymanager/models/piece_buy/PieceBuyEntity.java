@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "piece_has_buy")
-public class PieceBuy {
+public class PieceBuyEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "piece_buy_seq")

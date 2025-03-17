@@ -1,9 +1,7 @@
 package br.com.prodpaymanager.models.buy;
 
-import br.com.prodpaymanager.dto.piece.PieceCreationDTO;
 import br.com.prodpaymanager.models.payment.PaymentEntity;
-import br.com.prodpaymanager.models.piece.PieceEntity;
-import br.com.prodpaymanager.models.piece_buy.PieceBuy;
+import br.com.prodpaymanager.models.piece_buy.PieceBuyEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,7 +24,7 @@ public class BuyEntity {
     private int id;
 
     @OneToMany(mappedBy = "buy", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PieceBuy> pieceBuys = new ArrayList<>();
+    private List<PieceBuyEntity> pieceBuyEntities = new ArrayList<>();
 
     @OneToOne
     private PaymentEntity paymentEntity;

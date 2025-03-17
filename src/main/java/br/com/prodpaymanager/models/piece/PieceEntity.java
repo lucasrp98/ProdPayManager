@@ -17,16 +17,22 @@ public class PieceEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "piece_seq")
     @SequenceGenerator(name = "piece_seq", sequenceName = "piece_seq", allocationSize = 1)
     private int id;
+
     @Column(name = "cean")
     private String cEAN;
+
     @Column(name = "xprod")
     private String xProd;
+
     @Column(name = "qcom")
     private int qCom;
+
     @Column(name = "vuncom")
-    private String vUnCom;
-    @Column(name = "vprod")
-    private String vProd;
+    private double vUnCom;
+
+    @Transient //
+    private int quantityUsed;
+
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;

@@ -25,13 +25,7 @@ public class CreatePieceService {
 
             toAddAmount(existingPiece, pieceEntity.getQCom());
 
-            if (pieceEntity.getVUnCom() != null && !pieceEntity.getVUnCom().equals(existingPiece.getVUnCom())) {
-                existingPiece.setVUnCom(pieceEntity.getVUnCom());
-            }
-
-            if (pieceEntity.getVProd() != null && !pieceEntity.getVProd().equals(existingPiece.getVProd())) {
-                existingPiece.setVProd(pieceEntity.getVProd());
-            }
+            existingPiece.setVUnCom(pieceEntity.getVUnCom());
 
             return this.pieceRepository.save(existingPiece);
         }

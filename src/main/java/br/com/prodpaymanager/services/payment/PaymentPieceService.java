@@ -1,6 +1,6 @@
 package br.com.prodpaymanager.services.payment;
 
-import br.com.prodpaymanager.Interfaces.payment.IPaymentPieceService;
+import br.com.prodpaymanager.interfaces.payment.IPaymentPieceService;
 import br.com.prodpaymanager.dto.payment.PaymentCreationDTO;
 import br.com.prodpaymanager.models.buy.BuyEntity;
 import br.com.prodpaymanager.models.installment.InstallmentEntity;
