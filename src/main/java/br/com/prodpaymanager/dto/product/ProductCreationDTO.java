@@ -19,6 +19,8 @@ public class ProductCreationDTO {
 
     private double valueProduct;
 
+    private int quantProduct;
+
     private Map<Integer, Integer> piecesWithQuantity;
 
     public ProductEntity toProductEntity(List<PieceEntity> pieceEntities, double custPieces){
@@ -27,6 +29,7 @@ public class ProductCreationDTO {
         productEntity.setValueProduct(this.valueProduct);
         productEntity.setCustProduct(custPieces);
         productEntity.setPieces(pieceEntities);
+        productEntity.setQuantProduct(this.quantProduct);
 
         return productEntity;
     }

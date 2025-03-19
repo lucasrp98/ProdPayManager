@@ -29,5 +29,5 @@ public class PieceBuyEntity {
     @Column(name = "qcom")
     private int qCom;
     @Column(name = "vuncom")
-    private String vUnCom;
+    private double vUnCom;
 }

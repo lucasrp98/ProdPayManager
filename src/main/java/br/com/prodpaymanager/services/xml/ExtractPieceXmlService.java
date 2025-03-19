@@ -59,6 +59,7 @@ public class ExtractPieceXmlService implements IExtractPieceXmlService {
                 pieceBuyEntity.setBuy(buy);
                 pieceBuyEntity.setPiece(pieceEntity);
                 pieceBuyEntity.setQCom(qCom);
+                pieceBuyEntity.setVUnCom(vUnCom);
 
                 pieceBuyEntities.add(pieceBuyEntity);
             }

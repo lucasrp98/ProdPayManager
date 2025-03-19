@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CreateProductService {
@@ -27,16 +28,40 @@ public class CreateProductService {
 
         List<Integer> pieceIds = new ArrayList<>(productCreationDTO.getPiecesWithQuantity().keySet());
 
-        List<PieceEntity> pieceEntities = toCheckPecaExists(pieceIds);
+        List<PieceEntity>  pieceEntities = toCheckPecaExists(pieceIds);
+
+//        if(productCreationDTO.getQuantProduct() > 1) {
+//            pieceEntities = toUpdateQuantityPiece(productCreationDTO.getQuantProduct(),pieceEntities);
+//        }
 
         for (PieceEntity piece : pieceEntities) {
-            int quantidadeUtilizada = productCreationDTO.getPiecesWithQuantity().get(piece.getId());
-            piece.setQuantityUsed(quantidadeUtilizada);
+            int quantityUsed = productCreationDTO.getPiecesWithQuantity().get(piece.getId());
+
+            quantityUsed = quantityUsed * productCreationDTO.getQuantProduct();
+
+            if (piece.getQCom() < quantityUsed) {
+                throw new IllegalArgumentException("Estoque insuficiente para a peça ID: " + piece.getId());
+            }
+            piece.setQuantityUsed(quantityUsed);
         }
 
-        double sumPieces = toCheckCustProduct(pieceEntities);
+        double sumPieces = toCheckCustProduct(pieceEntities, productCreationDTO);
 
         ProductEntity productEntity = productCreationDTO.toProductEntity(pieceEntities, sumPieces);
+
+        Optional<ProductEntity> existingProductOpt = this.productRepository.findByNameProduct(productEntity.getNameProduct());
+
+        if (existingProductOpt.isPresent()) {
+            ProductEntity existingProduct = existingProductOpt.get();
+
+            toAddAmount(existingProduct, productEntity.getQuantProduct());
+
+            existingProduct.setCustProduct(sumPieces);
+
+            updatePieceStock(pieceEntities);
+
+            return this.productRepository.save(existingProduct);
+        }
 
         updatePieceStock(pieceEntities);
 
@@ -53,9 +78,9 @@ public class CreateProductService {
         return foundPieces;
     }
 
-    public double toCheckCustProduct(List<PieceEntity> list_pieces) {
+    public double toCheckCustProduct(List<PieceEntity> list_pieces, ProductCreationDTO productCreationDTO) {
         return list_pieces.stream()
-                .mapToDouble(piece -> piece.getVUnCom() * piece.getQCom())
+                .mapToDouble(piece -> piece.getVUnCom() * productCreationDTO.getPiecesWithQuantity().get(piece.getId()))
                 .sum();
     }
 
@@ -65,6 +90,18 @@ public class CreateProductService {
             piece.setQCom(piece.getQCom() - piece.getQuantityUsed());
         }
         pieceRepository.saveAll(pieceEntities);
+    }
+
+    public List<PieceEntity> toUpdateQuantityPiece(Integer quantity, List<PieceEntity> list_pieces){
+        for (PieceEntity piece : list_pieces) {
+            piece.setQuantityUsed(piece.getQuantityUsed() * quantity);
+        }
+        return list_pieces;
+    }
+
+    public void toAddAmount(ProductEntity productEntity, int additionalAmount){
+        int currentAmount = productEntity.getQuantProduct();
+        productEntity.setQuantProduct(currentAmount + additionalAmount);
     }
 
 
