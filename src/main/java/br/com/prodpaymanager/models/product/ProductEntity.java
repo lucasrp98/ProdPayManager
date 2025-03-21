@@ -1,6 +1,7 @@
 package br.com.prodpaymanager.models.product;
 
 import br.com.prodpaymanager.models.piece.PieceEntity;
+import br.com.prodpaymanager.models.sale.SaleEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,6 +37,11 @@ public class ProductEntity {
     @JoinTable(name = "product_has_piece", joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "piece_id"))
     private List<PieceEntity> pieces;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinTable(name = "product_has_sale", joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "sale_id"))
+    private List<SaleEntity> saleEntityList;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
