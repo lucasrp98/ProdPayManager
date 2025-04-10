@@ -43,6 +43,9 @@ public class ProductEntity {
             inverseJoinColumns = @JoinColumn(name = "sale_id"))
     private List<SaleEntity> saleEntityList;
 
+    @Transient
+    private int quantityUsed;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 

@@ -1,5 +1,6 @@
 package br.com.prodpaymanager.models.sale;
 
+import br.com.prodpaymanager.models.payment.PaymentSaleEntity;
 import br.com.prodpaymanager.models.seller.SellerEntity;
 import br.com.prodpaymanager.models.client.ClientEntity;
 import br.com.prodpaymanager.models.product.ProductEntity;
@@ -25,13 +26,11 @@ public class SaleEntity {
     private int id;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
-    private Date data_venda;
+    private Date dateSale;
 
-    private double valor_venda;
+    private double valueSale;
 
-    private int quantidade;
-
-    private double valor_frete;
+    private double valueFreight;
 
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
@@ -42,9 +41,13 @@ public class SaleEntity {
     private SellerEntity sellerEntity;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinTable(name = "product_has_ssale", joinColumns = @JoinColumn(name = "sale_id"),
+    @JoinTable(name = "product_has_sale", joinColumns = @JoinColumn(name = "sale_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id"))
     private List<ProductEntity> productEntityList;
+
+    @ManyToOne
+    @JoinColumn(name = "paymentsale_id", nullable = true)
+    private PaymentSaleEntity paymentSaleEntity;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

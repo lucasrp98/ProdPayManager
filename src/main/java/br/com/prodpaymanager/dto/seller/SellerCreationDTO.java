@@ -1,7 +1,13 @@
 package br.com.prodpaymanager.dto.seller;
 
 import br.com.prodpaymanager.models.seller.SellerEntity;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class SellerCreationDTO {
     private String name;
 

@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -15,7 +17,6 @@ public class SellerEntity extends PeopleEntity {
 
     private double comissionSeller;
 
-    @ManyToOne
-    @JoinColumn(name = "seller_id", nullable = true)
-    private SaleEntity saleEntity;
+    @OneToMany(mappedBy = "sellerEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SaleEntity> sales;
 }
